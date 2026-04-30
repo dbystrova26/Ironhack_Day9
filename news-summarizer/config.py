@@ -15,7 +15,8 @@ class Config:
     # API Keys
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-    NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+    NEWS_API_KEY = os.getenv("NEWSAPI_KEY")
+    GUARDIAN_API_KEY = os.getenv("GUARDIAN_API_KEY")
 
     # Environment
     ENVIRONMENT = os.getenv("ENVIRONMENT", "development")

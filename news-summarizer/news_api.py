@@ -74,6 +74,23 @@ class NewsAPI:
             print(f"OK: Fetched {len(processed_articles)} articles from News API")
             return processed_articles
 
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code if e.response is not None else "unknown"
+            message = ""
+            if e.response is not None:
+                try:
+                    message = e.response.json().get("message", "")
+                except ValueError:
+                    message = e.response.text[:200]
+
+            print(f"ERROR: News API request failed with status {status_code}: {message}")
+            if status_code == 401:
+                print(
+                    "ERROR: NewsAPI rejected the key. Check NEWSAPI_KEY in .env "
+                    "and make sure it is a valid key from newsapi.org."
+                )
+            return []
+
         except requests.exceptions.RequestException as e:
             print(f"ERROR: Error fetching news: {e}")
             return []

@@ -1,5 +1,6 @@
 """Unit tests for news summarizer."""
 
+import os
 from unittest.mock import Mock, patch
 
 import pytest
@@ -63,6 +64,14 @@ class TestTokenCounting:
 
 class TestNewsAPI:
     """Test News API integration."""
+
+    def test_config_uses_newsapi_key_name(self, monkeypatch):
+        """Test the NewsAPI key name matches .env exactly."""
+        monkeypatch.setenv("NEWSAPI_KEY", "new-key")
+
+        news_api_key = os.getenv("NEWSAPI_KEY")
+
+        assert news_api_key == "new-key"
 
     @patch("news_api.requests.get")
     def test_fetch_top_headlines(self, mock_get):

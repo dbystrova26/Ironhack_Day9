@@ -30,6 +30,8 @@ def main():
     print(f"\nFetching {num_articles} articles from category: {category}")
 
     try:
+        processed_any = False
+
         if use_async:
             # Use async version
             summarizer = AsyncNewsSummarizer()
@@ -44,6 +46,9 @@ def main():
                     summarizer.process_articles_async(articles, max_concurrent=3)
                 )
                 summarizer.generate_report(results)
+                processed_any = bool(results)
+            else:
+                print("No articles fetched. Check NEWSAPI_KEY, category, and API access.")
 
         else:
             # Use synchronous version
@@ -57,8 +62,15 @@ def main():
                 print(f"\nProcessing {len(articles)} articles...")
                 results = summarizer.process_articles(articles)
                 summarizer.generate_report(results)
+                processed_any = bool(results)
+            else:
+                print("No articles fetched. Check NEWSAPI_KEY, category, and API access.")
 
-        print("\nOK: Processing complete!")
+        if processed_any:
+            print("\nOK: Processing complete!")
+        else:
+            print("\nERROR: Processing did not complete because no articles were available.")
+            sys.exit(1)
 
     except KeyboardInterrupt:
         print("\n\nOperation cancelled by user.")
